@@ -1,0 +1,31 @@
+version: "3.7"
+
+
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    entrypoint:
+      - ./entrypoint.sh
+    volumes:
+      - ./:/zamki-api
+
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./static/:/static/
+      - ./media/:/media/
