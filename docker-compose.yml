@@ -11,8 +11,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: iko
       MONGO_INITDB_ROOT_PASSWORD: 887zKWFN
       MONGO_INITDB_DATABASE: zamki
-    ports:
-      - 27017:27017
 
   web:
     build:
