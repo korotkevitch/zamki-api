@@ -6,7 +6,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     """Serializer for service."""
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = ['id', 'service', 'description', 'image']
         read_only_fields = ['id']
 
 
@@ -15,6 +15,6 @@ class ServiceImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = ['id', 'image']
         read_only_fields = ['id']
         extra_kwargs = {'image': {'required': 'True'}}
