@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,6 +7,10 @@ from rest_framework.test import APITestCase
 from service.models import Service
 from service.api.serializers import ServiceSerializer, ServiceImageSerializer
 from service import models
+from unittest.mock import patch
+import os
+from PIL import Image
+import tempfile
 
 
 class ServiceApiTestCase(APITestCase):
@@ -111,3 +116,70 @@ class ServiceApiTestCase(APITestCase):
         }
         response = self.client.put(reverse('service-detail', args=(self.service.id,)), data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+def detail_url(service_id):
+    """Create and return a service detail URL."""
+    return reverse('service-detail', args=[service_id])
+
+def image_upload_url(service_id):
+    """Create and return an image upload URL."""
+    return reverse('service-upload-image', args=[service_id])
+
+def create_service(**params):
+    """Create and return a sample service."""
+    defaults = {
+        'service': 'Sample service title',
+        'description': 'sample_description',
+    }
+    defaults.update(params)
+
+    service = Service.objects.create(**defaults)
+    return service
+
+
+class ImageUploadTests(APITestCase):
+    """Tests for the image upload API."""
+
+    def setUp(self):
+        self.user = User.objects.create_superuser(username='iko', password='iko@123.com')
+        response = self.client.post(reverse('token_obtain_pair'), data={'username': 'iko', 'password': 'iko@123.com'})
+        self.token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.token)
+        self.client.force_authenticate(self.user)
+        self.service = create_service()
+
+    def tearDown(self):
+        self.service.image.delete()
+
+    def test_upload_image(self):
+        """Test uploading an image to a recipe."""
+        url = image_upload_url(self.service.id)
+        with tempfile.NamedTemporaryFile(suffix='.jpg') as image_file:
+            img = Image.new('RGB', (10, 10))
+            img.save(image_file, format='JPEG')
+            image_file.seek(0)
+            payload = {'image': image_file}
+            res = self.client.post(url, payload, format='multipart')
+
+        self.service.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn('image', res.data)
+        self.assertTrue(os.path.exists(self.service.image.path))
+
+    def test_upload_image_bad_request(self):
+        """Test uploading an invalid image."""
+        url = image_upload_url(self.service.id)
+        payload = {'image': 'notanimage'}
+        res = self.client.post(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # @patch('service.models.uuid.uuid4')
+    # def test_service_file_name_uuid(self, mock_uuid):
+    #     """Test generating image path."""
+    #     uuid = 'test-uuid'
+    #     mock_uuid.return_value = uuid
+    #     file_path = models.service_image_file_path(None, 'example.jpg').replace("\\","/")
+    #
+    #     self.assertEqual(file_path, f'uploads/service/{uuid}.jpg')
