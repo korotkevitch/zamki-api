@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView,)
-
+from drf_spectacular.views import (SpectacularAPIView, SpectacularSwaggerView,)
 
 
 urlpatterns = [
@@ -32,6 +32,9 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.jwt')),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-docs'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

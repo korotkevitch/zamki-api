@@ -7,6 +7,7 @@ from service.models import Service
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly, IsReviewUserOrReadOnly
 from .serializers import ServiceSerializer, ServiceImageSerializer
 from rest_framework.decorators import action
+from drf_spectacular.utils import (extend_schema_view, extend_schema, OpenApiParameter, OpenApiTypes,)
 
 
 class ServiceViewSet(viewsets.ModelViewSet):
