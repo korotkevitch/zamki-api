@@ -1,13 +1,9 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 from django.urls import reverse
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.test import APITestCase
 from service.models import Service
-from service.api.serializers import ServiceSerializer, ServiceImageSerializer
 from service import models
-from unittest.mock import patch
 import os
 from PIL import Image
 import tempfile

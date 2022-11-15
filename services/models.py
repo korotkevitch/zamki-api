@@ -14,7 +14,7 @@ def service_image_file_path(instance, filename):
 
 
 class Service(models.Model):
-    name = models.CharField('Название услуги', max_length=20, blank=True)
+    name = models.CharField('Название услуги', max_length=20)
     image = models.ImageField('Фото', null=True, upload_to=service_image_file_path)
     description = models.CharField('Описание', max_length=2000, blank=True)
 

@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'service',
-    'article',
+    'services',
+    'articles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'drf_spectacular',
 
 ]
@@ -94,8 +96,6 @@ DATABASES = {
         'PORT': env('DATABASE_PORT'),
         'USER': env('DATABASE_USER'),
         'PASSWORD': env('DATABASE_PASSWORD'),
-        'ENFORCE_SCHEMA': False,
-
     }
 }
 
@@ -153,7 +153,7 @@ REST_FRAMEWORK = {
     # ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',

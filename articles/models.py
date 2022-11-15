@@ -2,14 +2,14 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
-from service.models import Service
+from services.models import Service
 
 
 class Article(models.Model):
     title = models.CharField("Название", max_length=50)
+    related_service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Тема/сервис")
     storyline = models.TextField("О чем статья", blank=True)
-    text = models.TextField("Статья", blank=True)
-    service = models.CharField("Тематика (сервис)", max_length=50)
+    text = models.TextField("Текст статьи", blank=True)
     active = models.BooleanField("Опубликована", default=True)
     avg_rating = models.FloatField("Рейтинг", default=0)
     number_rating = models.IntegerField("Количество оценок", default=0)
