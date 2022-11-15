@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'drf_spectacular',
+    'django_filters',
 
 ]
 
@@ -163,6 +164,14 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 5,
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '100/day',
+        'review-create': '100/day',
+        'review-list': '100/day',
+        'review-detail': '100/day',
+    },
 }
 
 SIMPLE_JWT = {
