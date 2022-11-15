@@ -14,7 +14,7 @@ def service_image_file_path(instance, filename):
 
 
 class Service(models.Model):
-    service = models.CharField('Название услуги', max_length=20, blank=True)
+    name = models.CharField('Название услуги', max_length=20, blank=True)
     image = models.ImageField('Фото', null=True, upload_to=service_image_file_path)
     description = models.CharField('Описание', max_length=2000, blank=True)
 
@@ -31,4 +31,4 @@ class Service(models.Model):
         verbose_name_plural = 'Список услуг'
 
     def __str__(self):
-        return self.service
+        return self.name

@@ -20,11 +20,11 @@ class ServiceApiTestCase(APITestCase):
         response = self.client.post(reverse('token_obtain_pair'), data={'username': 'iko', 'password': 'iko@123.com'})
         self.token = response.data['access']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.token)
-        self.service = models.Service.objects.create(service="service_1", description="description_1")
+        self.service = models.Service.objects.create(name="name_1", description="description_1")
 
     def test_service_create_is_superuser(self):
         data = {
-            'service': "service_2",
+            'name': "name_2",
             'description': 'description_2'}
         response = self.client.post(reverse('service-list'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -35,7 +35,7 @@ class ServiceApiTestCase(APITestCase):
         self.token = response.data['access']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.token)
         data = {
-            'service': "service_2",
+            'name': "name_2",
             'description': 'description_2'}
         response = self.client.post(reverse('service-list'), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -43,7 +43,7 @@ class ServiceApiTestCase(APITestCase):
     def test_service_create_is_unauthorized(self):
         self.client.force_authenticate(user=None)
         data = {
-            'service': "service_2",
+            'name': "name_2",
             'description': 'description_2'}
         response = self.client.post(reverse('service-list'), data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -69,7 +69,7 @@ class ServiceApiTestCase(APITestCase):
         response = self.client.get(reverse('service-detail', args=(self.service.id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(models.Service.objects.count(), 1)
-        self.assertEqual(models.Service.objects.get().service, 'service_1')
+        self.assertEqual(models.Service.objects.get().name, 'name_1')
 
     def test_service_detail_is_user(self):
         self.user = User.objects.create_user(username='iko2', password='iko2@123.com')
@@ -79,18 +79,18 @@ class ServiceApiTestCase(APITestCase):
         response = self.client.get(reverse('service-detail', args=(self.service.id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(models.Service.objects.count(), 1)
-        self.assertEqual(models.Service.objects.get().service, 'service_1')
+        self.assertEqual(models.Service.objects.get().name, 'name_1')
 
     def test_service_detail_is_unauthorized(self):
         self.client.force_authenticate(user=None)
         response = self.client.get(reverse('service-detail', args=(self.service.id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(models.Service.objects.count(), 1)
-        self.assertEqual(models.Service.objects.get().service, 'service_1')
+        self.assertEqual(models.Service.objects.get().name, 'name_1')
 
     def test_service_update_is_superuser(self):
         data = {
-            "service": "my_service",
+            "name": "my_name",
             "description": "my_description"
         }
         response = self.client.put(reverse('service-detail', args=(self.service.id,)), data)
@@ -102,7 +102,7 @@ class ServiceApiTestCase(APITestCase):
         self.token = response.data['access']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.token)
         data = {
-            "service": "my_service",
+            "name": "my_name",
             "description": "my_description"
         }
         response = self.client.put(reverse('service-detail', args=(self.service.id,)), data)
@@ -111,7 +111,7 @@ class ServiceApiTestCase(APITestCase):
     def test_service_update_is_unauthorized(self):
         self.client.force_authenticate(user=None)
         data = {
-            "service": "my_service",
+            "name": "my_name",
             "description": "my_description"
         }
         response = self.client.put(reverse('service-detail', args=(self.service.id,)), data)
@@ -129,7 +129,7 @@ def image_upload_url(service_id):
 def create_service(**params):
     """Create and return a sample service."""
     defaults = {
-        'service': 'Sample service title',
+        'name': 'Sample service title',
         'description': 'sample_description',
     }
     defaults.update(params)
