@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from service.models import Service
-from service import models
+from services.models import Service
+from services import models
 import os
 from PIL import Image
 import tempfile
