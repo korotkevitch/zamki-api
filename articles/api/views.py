@@ -12,7 +12,6 @@ from .throttling import ReviewCreateThrottle, ReviewListThrottle
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-
 # from drf_spectacular.utils import (extend_schema_view, extend_schema, OpenApiParameter, OpenApiTypes,)
 
 
@@ -57,11 +56,12 @@ class RatingReview(generics.ListAPIView):
 
 
 class UserReview(generics.ListAPIView):
+    """ View all reviews of user (http://127.0.0.1:8000/reviews/?username=admin) """
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
         username = self.request.query_params.get('username', None)
-        return Review.objects.filter(review_user__username=username)  # для http://127.0.0.1:8000/reviews/?username=admin
+        return Review.objects.filter(review_user__username=username)
 
 
 class ReviewCreate(generics.CreateAPIView):
