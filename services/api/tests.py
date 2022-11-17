@@ -170,12 +170,3 @@ class ImageUploadTests(APITestCase):
         res = self.client.post(url, payload, format='multipart')
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
-    # @patch('service.models.uuid.uuid4')
-    # def test_service_file_name_uuid(self, mock_uuid):
-    #     """Test generating image path."""
-    #     uuid = 'test-uuid'
-    #     mock_uuid.return_value = uuid
-    #     file_path = models.service_image_file_path(None, 'example.jpg').replace("\\","/")
-    #
-    #     self.assertEqual(file_path, f'uploads/service/{uuid}.jpg')
