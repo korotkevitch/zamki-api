@@ -183,6 +183,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,  # refresh token will be generated together with access token every launching of refresh
 }
 
-# SPECTACULAR_SETTINGS = {
-#     'COMPONENT_SPLIT_REQUEST': True,
-# }
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True,
+}

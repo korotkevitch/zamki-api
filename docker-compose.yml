@@ -12,10 +12,10 @@ services:
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=db
-      - DB_NAME=db_zamki
-      - DB_USER=iko
-      - DB_PASS=887zKWFN
+      - DB_HOST=<add your data>
+      - DB_NAME=<add your data>
+      - DB_USER=<add your data>
+      - DB_PASS=<add your data>
     depends_on:
       - db
 
@@ -40,9 +40,9 @@ services:
     volumes:
       - dev-db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=db_zamki
-      - POSTGRES_USER=iko
-      - POSTGRES_PASSWORD=887zKWFN
+      - POSTGRES_DB=<add your data>
+      - POSTGRES_USER=<add your data>
+      - POSTGRES_PASSWORD=<add your data>
 
 volumes:
   dev-db-data:
